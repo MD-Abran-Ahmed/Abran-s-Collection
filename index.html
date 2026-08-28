@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Abran's Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <canvas id="webgl"></canvas>
+
+  <!-- Fixed chrome UI -->
+  <header class="site-header">
+    <span class="mark">ABRAN</span>
+    <span class="sub">THE COLLECTION</span>
+  </header>
+
+  <div class="counter" id="counter">
+    <span class="counter-current" id="counter-current">01</span>
+    <span class="counter-rule"></span>
+    <span class="counter-total">03</span>
+  </div>
+
+  <div class="scroll-cue" id="scroll-cue">
+    <span>SCROLL</span>
+    <span class="scroll-cue-line"></span>
+  </div>
+
+  <div class="drag-hint" id="drag-hint">DRAG TO INSPECT</div>
+
+  <!-- hotspot layer -->
+  <div id="hotspot-layer"></div>
+  <div id="hotspot-tooltip" class="hotspot-tooltip"></div>
+
+  <!-- loader -->
+  <div id="loader" class="loader">
+    <div class="loader-inner">
+      <span class="loader-mark">ABRAN</span>
+      <div class="loader-bar"><div class="loader-bar-fill" id="loader-fill"></div></div>
+      <span class="loader-label" id="loader-label">LOADING VEHICLE</span>
+    </div>
+  </div>
+
+  <!-- Scroll driven sections. These are empty spacers that exist purely to create
+       scroll distance; the canvas + info layer above are fixed and react to
+       scroll math computed in JS (see js/ScrollState.js). -->
+  <main id="scroll-container">
+    <section class="car-section" data-car="0"></section>
+    <section class="car-section" data-car="1"></section>
+    <section class="car-section" data-car="2"></section>
+    <section class="car-section outro-section" data-car="outro"></section>
+  </main>
+
+  <!-- Fixed, JS-controlled info panels. Exactly one (or two, mid cross-fade) visible at a time. -->
+  <div id="info-layer">
+
+    <div class="info-panel" id="info-0">
+      <div class="info-stage" data-stage="0">
+        <span class="eyebrow">2016</span>
+        <h1 class="model-name">LOTUS</h1>
+      </div>
+      <div class="info-stage" data-stage="1">
+        <h1 class="model-name">EXIGE 360 CUP</h1>
+        <p class="tagline">LIGHTWEIGHT<br/>TRACK-FOCUSED</p>
+      </div>
+      <div class="info-stage" data-stage="2">
+        <span class="spec-label">POWER</span>
+        <span class="spec-value">360 <em>HP</em></span>
+      </div>
+      <div class="info-stage" data-stage="3">
+        <span class="spec-label">ENGINE</span>
+        <span class="spec-value">3.5L <em>SUPERCHARGED V6</em></span>
+      </div>
+      <div class="info-stage" data-stage="4">
+        <span class="spec-label">DRIVETRAIN</span>
+        <span class="spec-value">REAR <em>WHEEL DRIVE</em></span>
+      </div>
+      <div class="info-index">01 / 03</div>
+    </div>
+
+    <div class="info-panel" id="info-1">
+      <div class="info-stage" data-stage="0">
+        <span class="eyebrow">2023</span>
+        <h1 class="model-name">PORSCHE</h1>
+      </div>
+      <div class="info-stage" data-stage="1">
+        <h1 class="model-name">911 GT3 RS</h1>
+        <p class="tagline">RACE-DERIVED<br/>AERO OBSESSED</p>
+      </div>
+      <div class="info-stage" data-stage="2">
+        <span class="spec-label">POWER</span>
+        <span class="spec-value">525 <em>HP</em></span>
+      </div>
+      <div class="info-stage" data-stage="3">
+        <span class="spec-label">ENGINE</span>
+        <span class="spec-value">4.0L <em>NATURALLY ASPIRATED FLAT-6</em></span>
+      </div>
+      <div class="info-stage" data-stage="4">
+        <span class="spec-label">DRIVETRAIN</span>
+        <span class="spec-value">REAR <em>WHEEL DRIVE</em></span>
+      </div>
+      <div class="info-index">02 / 03</div>
+    </div>
+
+    <div class="info-panel" id="info-2">
+      <div class="info-stage" data-stage="0">
+        <span class="eyebrow">1972</span>
+        <h1 class="model-name">DATSUN</h1>
+      </div>
+      <div class="info-stage" data-stage="1">
+        <h1 class="model-name">240K GT</h1>
+        <p class="tagline">JAPANESE CLASSIC<br/>ANALOG &amp; HONEST</p>
+      </div>
+      <div class="info-stage" data-stage="2">
+        <span class="spec-label">POWER</span>
+        <span class="spec-value">130 <em>HP</em></span>
+      </div>
+      <div class="info-stage" data-stage="3">
+        <span class="spec-label">ENGINE</span>
+        <span class="spec-value">2.4L <em>SOHC INLINE-6</em></span>
+      </div>
+      <div class="info-stage" data-stage="4">
+        <span class="spec-label">DRIVETRAIN</span>
+        <span class="spec-value">REAR <em>WHEEL DRIVE</em></span>
+      </div>
+      <div class="info-index">03 / 03</div>
+    </div>
+
+    <div class="outro-panel" id="outro-panel">
+      <span class="eyebrow">END OF THE LINE</span>
+      <h1 class="model-name">THE COLLECTION</h1>
+      <p class="tagline">THREE ERAS. ONE OBSESSION.</p>
+    </div>
+
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
