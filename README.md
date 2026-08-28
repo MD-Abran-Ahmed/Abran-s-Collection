@@ -1,4 +1,4 @@
-# MARQUE — Scroll-Driven 3D Car Showroom
+# Scroll-Driven 3D Car Showroom
 
 A cinematic, scroll-controlled showroom for three cars: rotate → reveal specs →
 slide away → next car enters. Built with vanilla ES modules + Three.js (no
